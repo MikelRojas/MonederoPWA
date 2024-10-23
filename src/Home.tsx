@@ -3,6 +3,14 @@ import QrScanner from './QrScanner';
 import './Styles.css'; 
 import { saveIdClient } from './Store';
 
+/**
+ * Componente principal de la interfaz de usuario para iniciar sesión y registrar un nuevo usuario.
+ *
+ * Este componente maneja el estado de inicio de sesión, registro, y la visualización del escáner de QR.
+ * 
+ * @component
+ * @returns {JSX.Element} El contenido del componente Home.
+ */
 const Home: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false); 
@@ -14,15 +22,22 @@ const Home: React.FC = () => {
   const [balance, setBalance] = useState<number | null>(null); 
   const [userId, setUserId] = useState<string | null>(null);
 
-  // Función que maneja lo que sucede cuando se lee un código QR
+  /**
+   * Maneja la lectura del código QR.
+   *
+   * @param {string | null} data - El dato leído del código QR.
+   */
   const handleQrScan = async (data: string | null) => {
     if (data) {
       console.log('Código QR leído:', data);
-      setShowQrScanner(false); // Cierra el escáner después de leer el código
-      await handleLogin(); // Verificar al usuario para obtener el balance actualizado
+      setShowQrScanner(false); 
+      await handleLogin();
     }
   };
 
+  /**
+   * Maneja el inicio de sesión del usuario.
+   */
   const handleLogin = async () => {
     console.log('Iniciando sesión con:', { name, phone, email, password });
 
@@ -38,9 +53,9 @@ const Home: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setIsLoggedIn(true); // Cambiar el estado a "logueado"
-        setBalance(data.balance); // Actualiza el balance si la respuesta es exitosa
-        setUserId(data.id); // Guardar el ID del usuario
+        setIsLoggedIn(true); 
+        setBalance(data.balance); 
+        setUserId(data.id); 
 
         saveIdClient(data.id);
         sessionStorage.setItem('userData', JSON.stringify({
@@ -61,6 +76,9 @@ const Home: React.FC = () => {
     }
   };
 
+  /**
+   * Maneja el registro de un nuevo usuario.
+   */
   const handleRegister = async () => {
     console.log('Registrando usuario con:', { name, phone, email, password });
 
@@ -85,6 +103,9 @@ const Home: React.FC = () => {
     }
   };
 
+  /**
+   * Alterna la visibilidad del escáner de QR.
+   */
   const toggleQrScanner = () => {
     setShowQrScanner((prev) => !prev);
   };
